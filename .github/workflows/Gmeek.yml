@@ -1,14 +1,11 @@
 name: build Gmeek
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
   issues:
     types: [opened, edited]
   schedule:
-    - cron: "20 16 * * *"
+    - cron: "0 0 * * *"
     
 jobs:
   build:
@@ -36,13 +33,12 @@ jobs:
         with:
           python-version: 3.8
 
-       - name: Clone source code
+      - name: Clone source code
         run: |
-        GMEEK_VERSION=$(jq -r ".GMEEK_VERSION" config.json)
-        git clone https://github.com/hst1189/Gmeek.git /opt/Gmeek;
-        cd /opt/Gmeek/
+          GMEEK_VERSION=$(jq -r ".GMEEK_VERSION" config.json)
+          git clone https://github.com/hst1189/Gmeek.git /opt/Gmeek;
+          cd /opt/Gmeek/
 
-　　　　※fork时如果没有clone tag，找不到tag会报错，将最后2行删除即可 （缺点：版本将无法选择，默认取得main下最新）
       - name: Install dependencies
         run: |
           pip install --upgrade pip
@@ -62,7 +58,7 @@ jobs:
           git config --local user.email "$(jq -r ".email" config.json)"
           git config --local user.name "${{ github.repository_owner }}"
           git add .
-          git commit -a -m '🎉auto update by Gmeek action' || echo "nothing to commit"
+          git commit -a -m '馃帀auto update by Gmeek action' || echo "nothing to commit"
           git push || echo "nothing to push"
           sleep 3
           
